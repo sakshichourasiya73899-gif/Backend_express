@@ -1,0 +1,57 @@
+main {
+    min-height: 100vh;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    
+    div{
+        h1{
+            text-align: center;
+        }
+    }
+}
+.form-container {
+    height: fit-content;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap:1.5rem;
+    
+    background-color: rgb(24, 24, 24);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        input {
+            border: none;
+            outline: none;
+            padding-inline: 1.5rem;
+            padding-block: 1rem;
+            border-radius: 1rem;
+            background-color: rgb(194, 196, 196);
+
+        }
+    }
+    button {
+        border: none;
+        outline: none;
+       
+        padding-inline: 1.5rem;
+        padding-block: 1rem;
+        border-radius: 1rem;
+        background-color:#e71d38;
+        color: white;
+        cursor: pointer;
+        font-size: 15px;
+            
+    }
+    .toggleAuthForm{
+        color: #e71d38;
+        cursor: pointer;
+    }
+}
