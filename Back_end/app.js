@@ -1,0 +1,17 @@
+let express = require("express")
+let app = express()
+let authRouter = require("./src/routes/auth.Router")
+let postRouter = require("./src/routes/post.Router")
+let followRouter= require("./src/routes/user.Router")
+let cookieParser = require("cookie-parser")
+let cors = require("cors")
+app.use(cors({
+    origin:"http://localhost:5173",credentials:true}))
+app.use(express.json())
+app.use(cookieParser())
+app.use("/api/auth",authRouter)
+app.use("/api/post",postRouter)
+app.use("/api/user",followRouter)
+console.log("authRouter:", typeof authRouter)
+console.log("postRouter:", typeof postRouter)
+module.exports = app
