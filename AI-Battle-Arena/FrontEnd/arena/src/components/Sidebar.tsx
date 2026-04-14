@@ -1,6 +1,8 @@
 import React from 'react';
 import { Menu, Plus, MessageSquare, LogOut, Settings, User } from 'lucide-react';
 import classNames from 'classnames';
+import { useAuth } from '../context/AuthContext';
+import { useChatContext } from '../context/ChatContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -8,6 +10,10 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+  const { user, logout } = useAuth();
+  const { battles, currentBattleId, createNewBattle, selectBattle } = useChatContext();
+  const displayUsername = user?.username || 'Shadow Architect';
+
   return (
     <div 
       className={classNames(
@@ -32,22 +38,37 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
       </div>
 
       <div className="px-4 mt-2">
-        <button className="w-full bg-surface-variant/40 hover:bg-surface-variant/60 border border-[rgba(255,255,255,0.05)] rounded-xl p-3 flex items-center justify-center gap-2 transition-all group backdrop-blur-sm shadow-sm relative overflow-hidden">
+        <button 
+          onClick={createNewBattle}
+          className="w-full bg-surface-variant/40 hover:bg-surface-variant/60 border border-[rgba(255,255,255,0.05)] rounded-xl p-3 flex items-center justify-center gap-2 transition-all group backdrop-blur-sm shadow-sm relative overflow-hidden"
+        >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
           <Plus className="w-4 h-4 text-primary" />
           <span className="font-display text-sm tracking-wide font-medium">New Battle</span>
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-6">
+      <div className="flex-1 overflow-y-auto px-4 py-6 scrollbar-thin scrollbar-thumb-surface-bright">
         <h3 className="font-display text-xs text-outline mb-4 uppercase tracking-wider">Recent Battles</h3>
         <div className="space-y-1">
-          {["Quantum Computing Basics", "Best Prime Minister of India Docs", "React vs Next.js 2026", "Explain Neumorphism"].map((item, idx) => (
-            <button key={idx} className="w-full text-left p-3 rounded-lg flex items-center gap-3 hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors text-sm">
-              <MessageSquare className="w-4 h-4 text-outline" />
-              <span className="truncate">{item}</span>
-            </button>
-          ))}
+          {battles.length === 0 ? (
+            <div className="text-xs text-outline text-center py-4 bg-surface-container-low rounded-xl">No battles yet</div>
+          ) : (
+            battles.map((battle) => (
+              <button 
+                key={battle.id}
+                onClick={() => selectBattle(battle.id)}
+                className={`w-full text-left p-3 rounded-lg flex items-center gap-3 transition-colors text-sm ${
+                  battle.id === currentBattleId 
+                    ? 'bg-surface-container-high text-on-surface font-medium border border-outline-variant/30' 
+                    : 'hover:bg-surface-container text-on-surface-variant hover:text-on-surface border border-transparent'
+                }`}
+              >
+                <MessageSquare className={`w-4 h-4 shrink-0 ${battle.id === currentBattleId ? 'text-primary' : 'text-outline'}`} />
+                <span className="truncate">{battle.title}</span>
+              </button>
+            ))
+          )}
         </div>
       </div>
 
@@ -57,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
             <User className="w-5 h-5 text-primary" />
           </div>
           <div className="flex-1 overflow-hidden">
-            <h4 className="font-display font-medium text-sm truncate">Shadow Architect</h4>
+            <h4 className="font-display font-medium text-sm truncate">{displayUsername}</h4>
             <p className="text-xs text-on-surface-variant truncate">elite+ tier</p>
           </div>
         </div>
@@ -66,7 +87,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
           <button className="text-on-surface-variant hover:text-on-surface p-2 rounded-lg hover:bg-surface-container transition-colors focus:ring-1 focus:ring-primary/50 outline-none">
             <Settings className="w-4 h-4" />
           </button>
-          <button className="text-on-surface-variant hover:text-error p-2 rounded-lg hover:bg-surface-container transition-colors focus:ring-1 focus:ring-error/50 outline-none">
+          <button 
+            onClick={logout}
+            className="text-on-surface-variant hover:text-error p-2 rounded-lg hover:bg-surface-container transition-colors focus:ring-1 focus:ring-error/50 outline-none"
+          >
             <LogOut className="w-4 h-4" />
           </button>
         </div>

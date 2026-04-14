@@ -4,9 +4,17 @@ import { Menu } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import MainChat from './components/MainChat';
 import InputBox from './components/InputBox';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { ChatProvider } from './context/ChatContext';
+import LoginPage from './components/LoginPage';
 
-function App() {
+function MainLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { user } = useAuth();
+
+  if (!user) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="flex h-screen w-full bg-background text-on-surface overflow-hidden font-body">
@@ -33,6 +41,16 @@ function App() {
       </main>
     </div>
   )
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <ChatProvider>
+        <MainLayout />
+      </ChatProvider>
+    </AuthProvider>
+  );
 }
 
 export default App;
