@@ -1,0 +1,8 @@
+
+
+......bulbs
+if I am working in a  team then how the multiple servers are created can't I make changes in the same server is it even possible.
+what is the difference between local environment and the production environment.
+
+......Stars
+in codes add a check that if environmental variable doesn't exist then stop the server
